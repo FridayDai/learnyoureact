@@ -9,8 +9,12 @@ app.engine('jsx', require('express-react-views')
 
 require('babel/register')({ ignore: false });
 
+var data = [
+  {id: 1, title: 'Shopping', detail: (process.argv[3] || 'Milk')},
+  {id: 2, title: 'Hair cut', detail: (process.argv[4] || '13:00')}
+];
 app.use('/', function(req, res) {
-  res.render('index' , '');
+  res.render('index' , {data: data});
 });
 
 app.listen(app.get('port'), function() {

@@ -5,7 +5,7 @@ export default class TodoBox extends React.Component{
     return (
       <div className='todoBox'>
         <h1>Todos</h1>
-        <TodoList />
+        <TodoList data={this.props.data}/>
         <TodoForm />
       </div>
     );
@@ -14,13 +14,16 @@ export default class TodoBox extends React.Component{
 
 class TodoList extends React.Component {
     render() {
+        var todos = this.props.data.map(function(todo) {
+            return (
+                <Todo key={todo.id} title={todo.title}>{todo.detail}</Todo>
+            )
+        });
         return (
             <div className="todoList">
-                <table style={{border: '2px solid black'}}>
+                <table style={style.tableContent}>
                     <tbody>
-                        <Todo title="Shopping">Milk</Todo>
-                        <Todo title="Hair cut">13:00</Todo>
-                        <Todo title="Learn React">15:00</Todo>
+                        {todos}
                     </tbody>
                 </table>
             </div>
@@ -39,11 +42,22 @@ class TodoForm extends React.Component {
 }
 
 class Todo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {checked: false}
+    }
+    handleChange(e) {
+        this.setState({checked: e.target.checked})
+    }
+
     render() {
         return (
             <tr>
-               <td  style={{border: '1px solid black'}}>{this.props.title}</td>
-               <td  style={{border: '1px solid black'}}>{this.props.children}</td>
+                <td style={style.tdContent}>
+                    <input type="checkbox" checked={this.state.checked} onChange={this.handleChange.bind(this)}/>
+                </td>
+                <td  style={style.tdContent}>{this.props.title}</td>
+                <td  style={style.tdContent}>{this.props.children}</td>
             </tr>
         )
     }
@@ -51,4 +65,14 @@ class Todo extends React.Component {
 
 Todo.propTypes = {
   title: React.PropTypes.string.isRequired
+};
+
+
+let style = {
+    tableContent: {
+        border: '2px solid black'
+    },
+    tdContent: {
+        border: '1px solid black'
+    }
 };
